@@ -1,0 +1,26 @@
+{
+  "name": "cypressjenkins",
+  "version": "1.0.0",
+  "description": "cypress, prueba jenkins",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run --e2e --browser chrome"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maicac/CypressJenkins.git"
+  },
+  "keywords": [
+    "jenkins",
+    "cypress"
+  ],
+  "author": "Darwoft",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maicac/CypressJenkins/issues"
+  },
+  "homepage": "https://github.com/maicac/CypressJenkins#readme",
+  "dependencies": {
+    "cypress": "^13.6.1"
+  }
+}
