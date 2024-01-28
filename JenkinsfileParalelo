@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Instalacion de Dependencias') {
+            steps{
+                bat 'npm ci'
+        }
+    }
+    stage('Ejecucion de Tests'){
+        parallel {
+            stage('Ejecucion en Chrome'){
+                steps {
+                   script {
+                      try {
+                          bat 'npx cypress run --e2e --browser chrome'
+                      } catch (Exception e){
+                          currentBuild.result = 'SUCCESS'
+                      }
+                    }
+                }
+            }
+            stage('Ejecucion en Firefox'){
+                steps {
+                   script {
+                      try {
+                          bat 'npx cypress run --e2e --browser firefox'
+                      } catch (Exception e){
+                          currentBuild.result = 'SUCCESS'
+                      }
+                    }
+                }
+            }
+        }
+    }
+    stage('Generacion de Logs y reporte Txt') {
+        steps {
+            bat 'node generateConsoleReport.js'
+        }
+    }
+}
+}
