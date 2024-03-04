@@ -4,18 +4,31 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+- none
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.17.0'
+jobs:
+- job: InstallNode
   displayName: 'Install Node.js'
+  steps:
+  - task: NodeTool@0
+    inputs:
+     versionSpec: '18.17.0'
 
-- script: |
-    npm ci
-    npx cypress run --e2e --browser chrome
-  displayName: 'npm install and build'
+- job: RunNpmCi
+  displayName: 'npm ci'
+  dependsOn: InstallNode
+  steps:
+    - script: |
+        npm ci
+        npx cypress run --e2e --browser chrome
+
+- job: RunTest
+  displayName: 'run tests'
+  dependsOn: RunNpmCi
+  steps:
+    - script: |
+        npx cypress run --e2e --browser chrome
+
