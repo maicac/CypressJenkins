@@ -1,8 +1,3 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 parameters:
   - name: image
     displayName: Pool image
@@ -12,8 +7,8 @@ parameters:
       - windows-latest
       - ubuntu-latest
       - macOS-latest
-  - name: navegador
-    displayName: Navegadores
+  - name: browser
+    displayName: Browsers
     type: string
     default: chrome
     values:
@@ -27,22 +22,25 @@ parameters:
     default: "@regresion"
 
 trigger:
-- none
+  - none
+
+variables:
+  - name: vmImage
+    value: ${{parameters.image}}
 
 jobs:
-- job: InstallNode
-  displayName: 'Install Node.js'
-  pool:
-    vmImage: ${{ parameters.image }}
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '18.16.0'
+  - job: InstallNode
+    displayName: "Install Node.js"
+    pool:
+      vmImage: $(vmImage)
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: 18.16.0
 
-- job: RunNpmCi
-  displayName: 'npm ci'
-  dependsOn: InstallNode
-  steps:
-    - script: |
-        npm ci
-        npx cypress run --e2e --browser ${{ parameters.navegador }} --env grepTags=${{ parameters.tags }}
+  - job: RunNpmCi
+    displayName: "Run npm ci"
+    dependsOn: InstallNode
+    steps:
+      - script: npm ci
+          npx cypress run --e2e --browser chrome
