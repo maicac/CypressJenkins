@@ -11,7 +11,7 @@ parameters:
     values:
       - windows-latest
       - ubuntu-latest
-      - macOS-latest 
+      - macOS-latest
 
 trigger:
 - none
@@ -20,18 +20,16 @@ jobs:
 - job: InstallNode
   displayName: 'Install Node.js'
   pool:
-    vmImage: ${{ parameters.image }}
+    vmImage: ${{parameters.image}}
   steps:
   - task: NodeTool@0
     inputs:
-     versionSpec: '18.17.0'
+      versionSpec: 18.16.0
 
 - job: RunNpmCi
-  displayName: 'npm ci'
+  displayName: 'Run npm ci'
   dependsOn: InstallNode
   steps:
-    - script: |
-        npm ci
-        npx cypress run --e2e --browser chrome
-        npx cypress run --e2e --browser chrome
-
+  - script: 
+      npm ci
+      npx cypress run --e2e --browser chrome
